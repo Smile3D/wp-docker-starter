@@ -1,0 +1,6 @@
+.env
+.env.deploy
+dump.sql
+wp-content/uploads/
+node_modules/
+.DS_Store
