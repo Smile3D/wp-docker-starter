@@ -4,3 +4,6 @@ dump.sql
 wp-content/uploads/
 node_modules/
 .DS_Store
+wp-config.php
+*.log
+vendor/
