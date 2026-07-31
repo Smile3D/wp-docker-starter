@@ -39,7 +39,13 @@ until docker compose exec -T db mysqladmin ping -h "localhost" --silent; do
   sleep 2
 done
 
-# --- 5. Устанавливаем WordPress (если ещё не установлен) ---
+# --- 5. Ждём, пока контейнер wordpress распакует ядро в volume wp_core ---
+echo "→ Ожидание готовности ядра WordPress..."
+until docker compose exec -T wpcli test -f /var/www/html/wp-load.php 2>/dev/null; do
+  sleep 2
+done
+
+# --- 6. Устанавливаем WordPress (если ещё не установлен) ---
 if ! docker compose exec -T wpcli wp core is-installed --path=/var/www/html 2>/dev/null; then
   echo "→ Установка WordPress..."
   docker compose exec -T wpcli wp core install \
@@ -54,7 +60,7 @@ else
   echo "→ WordPress уже установлен, пропускаем core install"
 fi
 
-# --- 6. Провижининг: плагины, настройки, чистка ---
+# --- 7. Провижининг: плагины, настройки, чистка ---
 echo "→ Провижининг..."
 docker compose exec -T wpcli bash /scripts/provision.sh "$THEME_NAME_ARG"
 
