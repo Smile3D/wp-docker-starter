@@ -7,3 +7,5 @@ node_modules/
 wp-config.php
 *.log
 vendor/
+licensed-plugins/*.zip
+!licensed-plugins/.gitkeep

@@ -1,0 +1,27 @@
+html {
+	box-sizing: border-box;
+}
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
+body {
+	color: var(--color-text);
+	background: var(--color-background);
+	font-size: var(--font-size-base);
+	line-height: var(--line-height-base);
+	font-family: var(--font-family-base);
+	min-width: var(--min-width);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+// adaptive images
+img {
+	max-width: 100%;
+	height: auto;
+	vertical-align: top;
+}
+
+// google map fix
+.gm-style img {max-width: none}

@@ -1,0 +1,61 @@
+// ─── CSS Custom Properties ───────────────────────────────────────────────────
+// Color calculator: http://razorjam.github.io/sasscolourfunctioncalculator/
+// Color names:      http://name-of-color.com/
+
+:root {
+	// Base colors
+	--color-gray: #999;
+	--color-black: #333;
+	--color-white: #fff;
+	--color-light-blue: #39f;
+
+	// Typography
+	--font-family-sans-serif: 'Arial', 'Helvetica Neue', 'Helvetica', sans-serif;
+	--font-family-serif: 'Times New Roman', 'Times', 'Baskerville', 'Georgia', serif;
+	--font-family-base: var(--font-family-sans-serif);
+	--font-size-base: 16px;
+	--line-height-base: 1.2;
+	--vertical-rhythm: 1.2em;
+
+	// Body
+	--color-text: var(--color-black);
+	--color-background: var(--color-white);
+	--min-width: 320px;
+
+	// Links
+	--color-link: var(--color-light-blue);
+
+	// Buttons
+	--btn-color: var(--color-white);
+	--btn-background: var(--color-black);
+	--btn-padding: 0.4em 0.7em;
+	--btn-font-size: inherit;
+
+	// Forms
+	--form-padding: var(--btn-padding);
+	--form-border-color: var(--color-gray);
+	--form-border-color-focus: var(--color-black);
+	--placeholder-color: var(--color-gray);
+
+	// Headings
+	--h1-font-size: 30px;
+	--h2-font-size: 27px;
+	--h3-font-size: 24px;
+	--h4-font-size: 21px;
+	--h5-font-size: 17px;
+	--h6-font-size: 15px;
+	--headings-font-family: inherit;
+	--headings-color: inherit;
+
+	// Animation
+	--animation-speed: 0.3s;
+}
+
+// ─── SCSS Variables (только для миксинов и функций) ──────────────────────────
+// Эти переменные нужны для компиляции SCSS и не используются напрямую в CSS.
+
+// Базовый размер rem — используется функциями rem-calc() и em-calc()
+$rem-base: 16px;
+
+// Скорость анимации — используется как параметр по умолчанию в @mixin animate()
+$animation-speed: 0.3s;
