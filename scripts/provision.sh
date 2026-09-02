@@ -5,7 +5,14 @@ THEME_NAME="${1:-my-theme}"
 WP="wp --path=/var/www/html"
 
 echo "  → Плагины из wp.org..."
-$WP plugin install safe-svg wp-mail-smtp redirection --activate
+$WP plugin install safe-svg wp-mail-smtp redirection wordpress-seo --activate
+
+# Yoast SEO: гасим мастер первичной настройки (First-time Configuration) и
+# редирект после активации, чтобы онбординг не всплывал при каждом init.sh
+$WP option patch update wpseo first_time_install false --format=json 2>/dev/null || true
+$WP option patch update wpseo should_redirect_after_install_free false --format=json 2>/dev/null || true
+$WP option patch update wpseo activation_redirect_timestamp_free 0 --format=json 2>/dev/null || true
+$WP option patch update wpseo dismiss_configuration_workout_notice true --format=json 2>/dev/null || true
 
 # Query Monitor только на dev-окружении
 $WP plugin install query-monitor --activate

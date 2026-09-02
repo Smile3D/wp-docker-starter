@@ -64,11 +64,35 @@ else
   echo "→ WordPress уже установлен, пропускаем core install"
 fi
 
-# --- 7. Провижининг: плагины, настройки, чистка ---
+# --- 7. Обновление ядра WordPress до последней стабильной ---
+# Работает независимо от того, свежая это установка или переустановка существующего
+# проекта. Идёт до провижининга плагинов, чтобы новые плагины ставились уже на
+# актуальное ядро. Без доступа в интернет шаг не роняет init.sh, а пишет warning.
+echo "→ Проверка актуальности ядра WordPress..."
+CURRENT_WP_VERSION=$(docker compose exec -T wpcli wp core version --path=/var/www/html 2>/dev/null || echo "неизвестно")
+
+if AVAILABLE_WP_VERSION=$(docker compose exec -T wpcli wp core check-update --path=/var/www/html --field=version 2>/dev/null); then
+  LATEST_WP_VERSION=$(printf '%s\n' "$AVAILABLE_WP_VERSION" | head -n1)
+  if [ -n "$LATEST_WP_VERSION" ]; then
+    echo "→ Доступно обновление ядра: ${CURRENT_WP_VERSION} → ${LATEST_WP_VERSION}. Обновляю..."
+    if docker compose exec -T wpcli wp core update --path=/var/www/html; then
+      docker compose exec -T wpcli wp core update-db --path=/var/www/html || true
+      echo "✓ Ядро WordPress обновлено до ${LATEST_WP_VERSION}"
+    else
+      echo "⚠ Не удалось обновить ядро WordPress. Продолжаю с текущей версией ${CURRENT_WP_VERSION}."
+    fi
+  else
+    echo "→ Ядро WordPress актуально (${CURRENT_WP_VERSION}), обновление не требуется."
+  fi
+else
+  echo "⚠ Не удалось проверить обновления ядра (нет доступа в интернет?). Продолжаю без обновления."
+fi
+
+# --- 8. Провижининг: плагины, настройки, чистка ---
 echo "→ Провижининг..."
 docker compose exec -T wpcli bash /scripts/provision.sh "$THEME_NAME_ARG"
 
-# --- 8. Установка npm-зависимостей темы (Gulp/SCSS) ---
+# --- 9. Установка npm-зависимостей темы (Gulp/SCSS) ---
 if [ -f "$THEME_PATH/package.json" ]; then
   if command -v npm >/dev/null 2>&1; then
     echo "→ Установка npm-зависимостей темы..."
